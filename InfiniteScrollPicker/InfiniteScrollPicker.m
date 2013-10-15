@@ -189,6 +189,7 @@
             {
                 biggestSize = ((view.frame.origin.x + view.frame.size.width) - view.frame.origin.x);
                 biggestView = view;
+         
             }
             
         }
@@ -206,12 +207,22 @@
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             
-            SEL selector = @selector(infiniteScrollPicker:didSelectAtImage:);
+            int x = [self determineIndexFromMatchingImageView:biggestView];
+            NSLog(@"x:%d",x);
+            SEL selector0 = @selector(infiniteScrollPicker:didSelectAtImageView:);
+            if ([[self firstAvailableUIViewController] respondsToSelector:selector0])
+            {
+                #pragma clang diagnostic push
+                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                [[self firstAvailableUIViewController] performSelector:selector0 withObject:self withObject:biggestView];
+                #pragma clang diagnostic pop
+            }
+            SEL selector = @selector(infiniteScrollPicker:didSelectAtImageView:);
             if ([[self firstAvailableUIViewController] respondsToSelector:selector])
             {
                 #pragma clang diagnostic push
                 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                [[self firstAvailableUIViewController] performSelector:selector withObject:self withObject:biggestView.image];
+                [[self firstAvailableUIViewController] performSelector:selector withObject:self withObject:biggestView];
                 #pragma clang diagnostic pop
             }
             
@@ -220,5 +231,27 @@
         });
     });
 }
+
+-(NSUInteger)determineIndexFromMatchingImageView:(UIImageView*)iv{
+    ENTER_METHOD;
+    int i =0;
+    for (UIImage *img in self.imageAry) {
+        if (img == iv.image)return i;
+        i++;
+    }
+    return 0;
+}
+
+// doesn't work
+-(NSUInteger)determineIndexFromCurrentScroll{
+    ENTER_METHOD;
+    float w = self.contentSize.width/ [imageStore count];
+    CGPoint pt = [self contentOffset];
+    CGFloat x = pt.x / w;
+    return (int) x;
+}
+
+
+
 
 @end

@@ -24,6 +24,10 @@ Item selection callback
 I was decided to make a delegate for this control but I need to subscribe to UIScrollViewDelegate in the picker view. So it is not allowed to have another delegate. At the result, it perform a selector when item snapped. You should implement the method in the view controller. It gives you an UIImage then you could calculate the selected index from the image array you passed in.
 \- (void)infiniteScrollPicker:(InfiniteScrollPicker *)infiniteScrollPicker didSelectAtImage:(UIImage *)image  
   
+\- (void)infiniteScrollPicker:(InfiniteScrollPicker *)infiniteScrollPicker didSelectAtImageView:(UIImageView *)iv
+\-{
+\-    NSLog(@"selected %d",iv.tag);
+\-}
     
 Example  
   
@@ -39,6 +43,10 @@ InfiniteScrollPicker *isp3 = [[InfiniteScrollPicker alloc] initWithFrame:CGRectM
 [isp3 setAlphaOfobjs:0.8];  
 [self.view addSubview:isp3];  
   
+
+
+
+
   
 Contact Me  
 You can add me on Facebook - http://www.facebook.com/seitkk

@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PRTween.h"
+
 
 @class InfiniteScrollPicker;
 
 @interface InfiniteScrollPicker : UIScrollView<UIScrollViewDelegate>
 {
+    PRTweenOperation *activeTweenOperation;
     NSMutableArray *imageStore;
     bool snapping;
     float lastSnappingX;
@@ -25,5 +28,6 @@
 @property (nonatomic) float positionRatio;
 
 - (void)initInfiniteScrollView;
+
 
 @end

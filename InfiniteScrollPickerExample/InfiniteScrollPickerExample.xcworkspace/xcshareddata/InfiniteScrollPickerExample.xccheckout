@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BB91D50A-D472-413F-9211-BC4B49035771</string>
+	<key>IDESourceControlProjectName</key>
+	<string>InfiniteScrollPickerExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2E45C2B4-4DDE-4716-AB29-17244B552C7F</key>
+		<string>https://github.com/jdp-global/InfiniteScrollPicker</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>InfiniteScrollPickerExample/InfiniteScrollPickerExample.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2E45C2B4-4DDE-4716-AB29-17244B552C7F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jdp-global/InfiniteScrollPicker</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2E45C2B4-4DDE-4716-AB29-17244B552C7F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2E45C2B4-4DDE-4716-AB29-17244B552C7F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>InfiniteScrollPicker</string>
+		</dict>
+	</array>
+</dict>
+</plist>

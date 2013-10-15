@@ -54,7 +54,13 @@ Example
 	[self.view addSubview:isp3];  
   
 
+This branch requires PRTween to work
+this overcomes a bug in uiscrollview with recycling the views in animating setcontentoffset 
+http://stackoverflow.com/questions/4404745/change-the-speed-of-setcontentoffsetanimated
 
+pod 'PRTween', '~> 0.0.1'
+
+this will allow on tap center to view
 
 
   

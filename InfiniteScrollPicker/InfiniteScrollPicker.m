@@ -9,7 +9,6 @@
 #import "InfiniteScrollPicker.h"
 #import "UIView+viewController.h"
 
-
 @implementation InfiniteScrollPicker
 
 @synthesize imageAry = _imageAry;
@@ -42,7 +41,7 @@
     }
     
     NSAssert((_itemSize.height < self.frame.size.height), @"item's height must not bigger than scrollpicker's height");
-    
+
     self.pagingEnabled = NO;
     self.showsHorizontalScrollIndicator = NO;
     self.showsVerticalScrollIndicator = NO;
@@ -56,14 +55,26 @@
             // Place images into the bottom of view
             UIImageView *temp = [[UIImageView alloc] initWithFrame:CGRectMake(i * _itemSize.width, self.frame.size.height - _itemSize.height, _itemSize.width, _itemSize.height)];
             temp.image = [_imageAry objectAtIndex:i%_imageAry.count];
-            [imageStore addObject:temp];
-            temp.tag = i;
-            temp.userInteractionEnabled = YES;
-            UITapGestureRecognizer *newTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(newTapMethod:)];
-            newTap.numberOfTapsRequired = 1;
-            [temp setUserInteractionEnabled:YES];
-            [temp addGestureRecognizer:newTap];
-            [self addSubview:temp];
+            @try {
+                [imageStore addObject:temp];
+                temp.tag = i;
+                temp.userInteractionEnabled = YES;
+                UITapGestureRecognizer *newTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(newTapMethod:)];
+                newTap.numberOfTapsRequired = 2;
+                [temp setUserInteractionEnabled:YES];
+                [temp addGestureRecognizer:newTap];
+                
+                UITapGestureRecognizer *newTap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(centerView:)];
+                newTap1.numberOfTapsRequired =1;
+                [temp addGestureRecognizer:newTap1];
+                
+                [self addSubview:temp];
+            }
+            @catch (NSException *exception) {
+                
+            }
+           
+          
         }
         
         self.contentSize = CGSizeMake(_imageAry.count * 5 * _itemSize.width, self.frame.size.height);
@@ -80,15 +91,24 @@
                 [self snapToAnEmotion];
             });
         });
-        
+
     }
     
 }
+
+-(void)centerView:(UITapGestureRecognizer*)sender{
+    
+    if (sender.state != UIGestureRecognizerStateEnded)  return;
+    NSLog(@"x:%f", sender.view.frame.origin.x);
+
+    CGFloat f = sender.view.frame.origin.x-sender.view.frame.size.width;
+    [self doAnimatedScrollTo:CGPointMake(f, 0)];
+ 
+}
 -(void)newTapMethod:(UITapGestureRecognizer*)sender{
     
-    if (sender.state != UIGestureRecognizerStateEnded)  // <---
-        return;
-    
+    if (sender.state != UIGestureRecognizerStateEnded) return;
+ 
     NSLog(@"doubleTapped");
     SEL selector0 = @selector(infiniteScrollPicker:doubleTapped:);
     if ([[self firstAvailableUIViewController] respondsToSelector:selector0])
@@ -126,7 +146,7 @@
         } else if (self.contentOffset.x >= (sectionSize * 3 + sectionSize/2)) {
             self.contentOffset = CGPointMake(sectionSize * 2 + sectionSize/2, 0);
         }
-        
+
         [self reloadView:self.contentOffset.x];
     }
 }
@@ -145,7 +165,7 @@
 {
     float biggestSize = 0;
     id biggestView;
-    
+
     for (int i = 0; i < imageStore.count; i++) {
         
         UIImageView *view = [imageStore objectAtIndex:i];
@@ -163,7 +183,7 @@
                                     self.frame.size.height - _itemSize.height - heightOffset - (addHeight/positionRatio),
                                     _itemSize.width + addHeight,
                                     _itemSize.height + addHeight);
-            
+
             if (((view.frame.origin.x + view.frame.size.width) - view.frame.origin.x) > biggestSize)
             {
                 biggestSize = ((view.frame.origin.x + view.frame.size.width) - view.frame.origin.x);
@@ -183,14 +203,14 @@
     {
         UIView *cBlock = [imageStore objectAtIndex:i];
         cBlock.alpha = alphaOfobjs;
-        
+
         if (i > 0)
         {
             UIView *pBlock = [imageStore objectAtIndex:i-1];
             cBlock.frame = CGRectMake(pBlock.frame.origin.x + pBlock.frame.size.width, cBlock.frame.origin.y, cBlock.frame.size.width, cBlock.frame.size.height);
         }
     }
-    
+
     [(UIView *)biggestView setAlpha:1.0];
 }
 
@@ -205,14 +225,14 @@
     
     for (int i = 0; i < imageStore.count; i++) {
         UIImageView *view = [imageStore objectAtIndex:i];
-        
+    
         if (view.center.x > offset && view.center.x < (offset + self.frame.size.width))
         {
             if (((view.center.x + view.frame.size.width) - view.center.x) > biggestSize)
             {
                 biggestSize = ((view.frame.origin.x + view.frame.size.width) - view.frame.origin.x);
                 biggestView = view;
-                
+         
             }
             
         }
@@ -231,25 +251,25 @@
         dispatch_async(dispatch_get_main_queue(), ^ {
             
             int x = [self determineIndexFromMatchingImageView:biggestView];
-            // NSLog(@"x:%d",x);
+           // NSLog(@"x:%d",x);
             biggestView.tag = x;
-            //  NSLog(@"tag:%d",biggestView.tag);
+          //  NSLog(@"tag:%d",biggestView.tag);
             
             SEL selector0 = @selector(infiniteScrollPicker:didSelectAtImageView:);
             if ([[self firstAvailableUIViewController] respondsToSelector:selector0])
             {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                #pragma clang diagnostic push
+                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [[self firstAvailableUIViewController] performSelector:selector0 withObject:self withObject:biggestView];
-#pragma clang diagnostic pop
+                #pragma clang diagnostic pop
             }
             SEL selector = @selector(infiniteScrollPicker:didSelectAtImageView:);
             if ([[self firstAvailableUIViewController] respondsToSelector:selector])
             {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                #pragma clang diagnostic push
+                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [[self firstAvailableUIViewController] performSelector:selector withObject:self withObject:biggestView];
-#pragma clang diagnostic pop
+                #pragma clang diagnostic pop
             }
             
             [self setScrollEnabled:YES];
@@ -259,7 +279,7 @@
 }
 
 -(NSUInteger)determineIndexFromMatchingImageView:(UIImageView*)iv{
-    ENTER_METHOD;
+
     int i =0;
     for (UIImage *img in self.imageAry) {
         if (img == iv.image)return i;
@@ -270,14 +290,21 @@
 
 // doesn't work
 -(NSUInteger)determineIndexFromCurrentScroll{
-    ENTER_METHOD;
+
     float w = self.contentSize.width/ [imageStore count];
     CGPoint pt = [self contentOffset];
     CGFloat x = pt.x / w;
     return (int) x;
 }
 
-
+- (void) doAnimatedScrollTo:(CGPoint)destinationOffset
+{
+    CGPoint offset = [self contentOffset];
+    
+    activeTweenOperation = [PRTweenCGPointLerp lerp:self property:@"contentOffset" from:offset to:destinationOffset duration:1.5];
+    
+    
+}
 
 
 @end
